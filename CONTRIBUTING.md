@@ -11,6 +11,8 @@ To avoid having to configure and manage dependencies and virtual environments be
 ##### Linux
 [Install Docker Engine](https://docs.docker.com/engine/install/)
 
+Make sure the current user gets added to the `docker` group as per the instructions [here](https://docs.docker.com/engine/install/linux-postinstall/).
+
 ##### Windows
 [Install Docker Desktop on Windows](https://docs.docker.com/docker-for-windows/install/)
 
@@ -38,7 +40,7 @@ git clone https://github.com/jdrempel/atmos.git
 1. Ensure the `Remote - Containers` extension is installed in VS Code.
 2. Open the project's base directory in the editor.
 3. In the command palette, select `Remote-Containers: Reopen in Container`.
-4. A new window opens in the virtual environment within the Docker container. This environment contains all necessary dependencies for the project so nothing else needs to be installed or reconfigured on the local (host) machine.
+4. A new window opens in the virtual environment within the Docker container. It may take several minutes to load the first time as Docker downloads the required components and then builds the image. This environment contains all necessary dependencies for the project so nothing else needs to be installed or reconfigured on the local (host) machine.
 
 ##### Option 2: Develop on host machine
 

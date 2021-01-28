@@ -5,14 +5,6 @@
 
 --------
 
-**Build Status & Dependencies**
-> Badges go here
-
-**Issues**
-> Issues badge goes here
-
---------
-
 ## Table of Contents
 - [Installation](#installation)
 - [Features](#features)
@@ -37,8 +29,7 @@
 --------
 
 ## Contributing
-
-> How to get started with contributing (include a link to [CONTRIBUTING.md](CONTRIBUTING.md) here)
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for information on how to help with development.
 
 --------
 
