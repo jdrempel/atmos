@@ -16,10 +16,13 @@ class WelcomeScreen(MENU_TYPE):
 
     def __init__(self, *args, **kwargs):
         """
+        :precond: welcome_msg must exist in the scope immediately outside of this method call
+        :type welcome_msg: str
         :precond: mode_select must exist in the scope immediately outside of this method call
         :type mode_select: dict
         """
         super().__init__(*args, **kwargs)
+        self.message = welcome_msg
         self.prompt = Prompt(
             "Select one of the following options:",
             int, mode_select
@@ -48,6 +51,7 @@ class TestMenu(MENU_TYPE):
         :type nav_select: dict
         """
         super().__init__(*args, **kwargs)
+        self.message = "======== TEST ========"
         self.prompt = Prompt(
             "Where to next?",
             int, nav_select
@@ -72,6 +76,7 @@ class SimMenu(MENU_TYPE):
         :type nav_select: dict
         """
         super().__init__(*args, **kwargs)
+        self.message = "======== SIM ========"
         self.prompt = Prompt(
             "Where to next?",
             int, nav_select
@@ -96,6 +101,7 @@ class MissionOpsMenu(MENU_TYPE):
         :type nav_select: dict
         """
         super().__init__(*args, **kwargs)
+        self.message = "======== MISSION OPS ========"
         self.prompt = Prompt(
             "Where to next?",
             int, nav_select
@@ -132,13 +138,11 @@ if __name__ == "__main__":
         0: "0. Home",
     }
 
-    # Main menu (mode select)
-    welcome = WelcomeScreen(welcome_msg)
-    # Test menu
-    test = TestMenu("---- TEST ----")
-    # Simulation menu
-    sim = SimMenu("---- SIM ----")
-    # Mission Ops menu
-    mos = MissionOpsMenu("---- MISSION OPS ----")
+    
+    welcome = WelcomeScreen() # Main menu (mode select)
+    test = TestMenu()   # Test menu
+    sim = SimMenu()  # Simulation menu
+    mos = MissionOpsMenu()  # Mission Ops menu
 
-    App.instance().run(welcome)
+    app = App.instance()
+    app.run(welcome)

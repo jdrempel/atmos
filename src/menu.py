@@ -11,7 +11,7 @@ class BaseMenu(ABC):
     Provides an interface for various kinds of menus
     """
 
-    def __init__(self, message:str, prompt:Prompt=None, callback=None):
+    def __init__(self, message:str=None, prompt:Prompt=None, callback=None):
         self.interface = None
         self.message = message
         self._prompt = prompt
@@ -128,7 +128,7 @@ class TerminalMenu(BaseMenu):
     Implements a terminal UI menu (text-based)
     """ 
 
-    def __init__(self, message: str, prompt: Prompt=None, callback=None):
+    def __init__(self, message: str=None, prompt: Prompt=None, callback=None):
         super().__init__(message, prompt, callback)
         self.interface = TUI()
     
