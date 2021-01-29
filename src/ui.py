@@ -185,9 +185,11 @@ class TUI(UI):
         input_str = self.get_str()
         try:
             if float(input_str):
-                if int(input_str):
-                    return int(input_str)
+                if int(float(input_str)):
+                    return int(float(input_str))
                 return float(input_str)
+            elif input_str == "0":
+                return 0
             else:
                 return None
         except ValueError:
