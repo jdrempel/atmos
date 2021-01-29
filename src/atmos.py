@@ -12,7 +12,18 @@ MENU_TYPE = TerminalMenu
 class WelcomeScreen(MENU_TYPE):
     """ 
     The first menu (select mode)
-    """ 
+    """
+
+    def __init__(self, *args, **kwargs):
+        """
+        :precond: mode_select must exist in the scope immediately outside of this method call
+        :type mode_select: dict
+        """
+        super().__init__(*args, **kwargs)
+        self.prompt = Prompt(
+            "Select one of the following options:",
+            int, mode_select
+        )
     
     def perform(self, data):
         if data == 1:
@@ -31,6 +42,17 @@ class TestMenu(MENU_TYPE):
     The test main menu
     """
 
+    def __init__(self, *args, **kwargs):
+        """
+        :precond: nav_select must exist in the scope immediately outside of this method call
+        :type nav_select: dict
+        """
+        super().__init__(*args, **kwargs)
+        self.prompt = Prompt(
+            "Where to next?",
+            int, nav_select
+        )
+
     def perform(self, data):
         if data == 1:
             self.next = self.prev
@@ -44,6 +66,17 @@ class SimMenu(MENU_TYPE):
     The simulation main menu
     """
 
+    def __init__(self, *args, **kwargs):
+        """
+        :precond: nav_select must exist in the scope immediately outside of this method call
+        :type nav_select: dict
+        """
+        super().__init__(*args, **kwargs)
+        self.prompt = Prompt(
+            "Where to next?",
+            int, nav_select
+        )
+
     def perform(self, data):
         if data == 1:
             self.next = self.prev
@@ -56,6 +89,17 @@ class MissionOpsMenu(MENU_TYPE):
     """
     The mission ops main menu
     """
+
+    def __init__(self, *args, **kwargs):
+        """
+        :precond: nav_select must exist in the scope immediately outside of this method call
+        :type nav_select: dict
+        """
+        super().__init__(*args, **kwargs)
+        self.prompt = Prompt(
+            "Where to next?",
+            int, nav_select
+        )
 
     def perform(self, data):
         if data == 1:
@@ -89,20 +133,12 @@ if __name__ == "__main__":
     }
 
     # Main menu (mode select)
-    mode_prompt = Prompt("Select one of the following options:", int, mode_select)
-    welcome = WelcomeScreen(welcome_msg, mode_prompt)
-
+    welcome = WelcomeScreen(welcome_msg)
     # Test menu
-    test_prompt = Prompt("Where to next?", int, nav_select)
-    test = TestMenu("---- TEST ----", test_prompt)
-
+    test = TestMenu("---- TEST ----")
     # Simulation menu
-    sim_prompt = Prompt("Where to next?", int, nav_select)
-    sim = SimMenu("---- SIM ----", sim_prompt)
-
+    sim = SimMenu("---- SIM ----")
     # Mission Ops menu
-    mos_prompt = Prompt("Where to next?", int, nav_select)
-    mos = MissionOpsMenu("---- MISSION OPS ----", mos_prompt)
+    mos = MissionOpsMenu("---- MISSION OPS ----")
 
-    app = App.instance()
-    app.run(welcome)
+    App.instance().run(welcome)

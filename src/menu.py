@@ -14,7 +14,7 @@ class BaseMenu(ABC):
     def __init__(self, message:str, prompt:Prompt=None, callback=None):
         self.interface = None
         self.message = message
-        self.prompt = prompt
+        self._prompt = prompt
         self._prev = None
         self._next = None
         self._callback = callback
@@ -29,13 +29,33 @@ class BaseMenu(ABC):
         """
         self.interface.output(self.message)
         response = None
-        if self.prompt is not None:
-            response = self.interface.prompt(self.prompt)
+        if self._prompt is not None:
+            response = self.interface.prompt(self._prompt)
         try:
             self._callback(response)
         except TypeError:
             pass
         self.perform(response)
+    
+    @property
+    def prompt(self) -> Prompt:
+        """
+        Returns the prompt (if any) for this menu
+
+        :return: self._prompt
+        :rtype: Prompt
+        """
+        return self._prompt
+    
+    @prompt.setter
+    def prompt(self, prompt: Prompt) -> None:
+        """
+        Sets the prompt for this menu
+
+        :param prompt: The prompt to be applied to this menu
+        :type prompt: Prompt
+        """
+        self._prompt = prompt
 
     @property
     def prev(self):
@@ -108,7 +128,7 @@ class TerminalMenu(BaseMenu):
     Implements a terminal UI menu (text-based)
     """ 
 
-    def __init__(self, message: str, prompt: Prompt, callback=None):
+    def __init__(self, message: str, prompt: Prompt=None, callback=None):
         super().__init__(message, prompt, callback)
         self.interface = TUI()
     
@@ -219,4 +239,4 @@ class App:
             self.running = False
         elif message == "BAD_RESPONSE":
             print("ERROR: BadResponse")
-            quit()
+            # quit()
