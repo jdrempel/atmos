@@ -47,19 +47,33 @@ class TestMenu(MENU_TYPE):
 
     def __init__(self, *args, **kwargs):
         """
-        :precond: nav_select must exist in the scope immediately outside of this method call
-        :type nav_select: dict
+        :precond: test_select must exist in the scope immediately outside of this method call
+        :type test_select: dict
         """
         super().__init__(*args, **kwargs)
         self.message = "======== TEST ========"
         self.prompt = Prompt(
-            "Where to next?",
-            int, nav_select
+            "Select an action:",
+            int, test_select
         )
 
     def perform(self, data):
         if data == 1:
-            self.next = self.prev
+            # Load test
+            # self.next = self.lookup_menu("TestLoaderMenu")
+            pass
+        elif data == 2:
+            # Check connection
+            # Test.check_connections()
+            pass
+        elif data == 3:
+            # Start test
+            # Test.run()
+            pass
+        elif data == 4:
+            # Export results
+            # self.next = self.lookup_menu("TestExportMenu")
+            pass
         elif data == 9:
             self.app_event("EXIT")
         elif data == 0:
@@ -125,17 +139,27 @@ if __name__ == "__main__":
     
     # Mode select menu prompt
     mode_select = {
-        1: "1. Test",
-        2: "2. Simulation",
-        3: "3. Mission Ops",
-        9: "9. Exit",
+        1: "Test",
+        2: "Simulation",
+        3: "Mission Ops",
+        9: "Exit",
     }
 
     # Navigation menu prompt
     nav_select = {
-        1: "1. Back",
-        9: "9. Exit",
-        0: "0. Home",
+        1: "Back",
+        9: "Exit",
+        0: "Home",
+    }
+
+    # Test mneu prompt
+    test_select = {
+        1: "Load Test",
+        2: "Check Connection",
+        3: "Start Test",
+        4: "Export Results",
+        9: "Exit",
+        0: "Home",
     }
 
     

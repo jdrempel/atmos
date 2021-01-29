@@ -236,6 +236,7 @@ class App:
         :type message: str
         """
         if message == "EXIT":
+            print("Exiting...")
             self.running = False
         elif message == "BAD_RESPONSE":
             print("ERROR: BadResponse")

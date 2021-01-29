@@ -20,8 +20,8 @@ class Prompt:
         output = self._message
         if len(self._options) > 0:
             output += "\n"
-            for _, v in self._options.items():
-                output += v+"\n"
+            for k, v in self._options.items():
+                output += f"{k}. {v}\n"
         return output
 
 # Class: BaseOutput
