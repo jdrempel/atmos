@@ -11,14 +11,17 @@ class BaseMenu(ABC):
     Provides an interface for various kinds of menus
     """
 
-    def __init__(self, message:str, prompt:Prompt=None, callback=None):
+    def __init__(self, message:str=None, prompt:Prompt=None, callback=None):
         self.interface = None
         self.message = message
-        self.prompt = prompt
+        self._prompt = prompt
         self._prev = None
         self._next = None
         self._callback = callback
-        self._app = None
+        self._app = App.instance()
+
+        # Register this menu in the App menu registry
+        App.register_menu(self)
 
     def display(self) -> None:
         """
@@ -26,13 +29,33 @@ class BaseMenu(ABC):
         """
         self.interface.output(self.message)
         response = None
-        if self.prompt is not None:
-            response = self.interface.prompt(self.prompt)
+        if self._prompt is not None:
+            response = self.interface.prompt(self._prompt)
         try:
             self._callback(response)
         except TypeError:
             pass
         self.perform(response)
+    
+    @property
+    def prompt(self) -> Prompt:
+        """
+        Returns the prompt (if any) for this menu
+
+        :return: self._prompt
+        :rtype: Prompt
+        """
+        return self._prompt
+    
+    @prompt.setter
+    def prompt(self, prompt: Prompt) -> None:
+        """
+        Sets the prompt for this menu
+
+        :param prompt: The prompt to be applied to this menu
+        :type prompt: Prompt
+        """
+        self._prompt = prompt
 
     @property
     def prev(self):
@@ -73,15 +96,7 @@ class BaseMenu(ABC):
         :type next: BaseMenu
         """
         self._next = next
-    
-    def set_app(self, app) -> None:
-        """ 
-        Sets the app that this menu belongs to
-
-        :param app: The app to which this menu belongs
-        :type app: App
-        """ 
-        self._app = app
+        self._app.load_next(self._next)
     
     def app_event(self, message: Any) -> None:
         """ 
@@ -99,58 +114,130 @@ class BaseMenu(ABC):
         """
         pass
     
+    def lookup_menu(self, name: str):
+        """
+        Returns a menu from the current menu's app instance by name
+
+        :param name: The name of the menu to look up
+        :type name: str
+        """
+        return self._app.menus[name]
+    
 class TerminalMenu(BaseMenu):
     """ 
     Implements a terminal UI menu (text-based)
     """ 
 
-    def __init__(self, message: str, prompt: Prompt, callback=None):
+    def __init__(self, message: str=None, prompt: Prompt=None, callback=None):
         super().__init__(message, prompt, callback)
         self.interface = TUI()
     
     @abstractmethod
     def perform(self) -> None:
         pass
-    
+
 class App:
     """ 
     Manages the state of the application and transitions between menus
-    """ 
+    """
 
-    def __init__(self, menus: list, start: BaseMenu):
+    _instance = None
+    _menus = {}
+
+    def __init__(self):
         """
-        Instantiates a new App
+        Instantiates a new App (virtual, private constructor)
 
         :param menus: A list of the menus belonging to this App
         :type menus: list
         :param start: The menu at which the App starts
         :type start: BaseMenu
         """
-        self.current_menu = start
+        if App._instance is not None:
+            raise Exception("App instance already exists!")
+        App._instance = self
+
+        self.current_menu = None
         self.previous_menu = None
         self.next_menu = None
-        self.menus = menus
-        self.running = True
-
-        for menu in menus:
-            menu.set_app(self)
+        self.running = False
     
-    def run(self):
+    @staticmethod
+    def instance():
+        """
+        Static access method
+        """
+        if App._instance is None:
+            App()
+        return App._instance
+    
+    @staticmethod
+    def get_menu_name(menu: BaseMenu) -> str:
+        """
+        Static method for getting the name of a menu class as a string
+
+        :param menu: The menu instance to get the name for
+        :type menu: BaseMenu
+        :return: The name of the menu's class, in string form
+        :rtype: str
+        """
+        return menu.__class__.__name__
+    
+    @staticmethod
+    def register_menu(menu: BaseMenu) -> None:
+        """
+        Static method for registering a menu in the app
+
+        :param menu: The menu instance to register
+        :type menu: BaseMenu
+        """
+        App._menus[App.get_menu_name(menu)] = menu
+    
+    def run(self, start: BaseMenu) -> None:
+        """
+        The main loop for the application
+
+        :param start: The menu to begin execution from
+        :type start: BaseMenu
+        """
+        self.load_next(start)
+        self.running = True
         while self.running:
             self.current_menu.display()
     
-    def go_next(self):
+    def load_next(self, next: BaseMenu) -> None:
+        """
+        Updates the state of the application by loading the next menu
+
+        :param next: The next menu to be displayed
+        :type next: BaseMenu
+        """
         self.previous_menu = self.current_menu
-        self.current_menu = self.next_menu
-        self.next_menu = self.current_menu.next
-        self.current_menu.display()
+        self.current_menu = next
+        self.current_menu.prev = self.previous_menu
     
-    def go_back(self):
+    def load_prev(self):
+        """
+        Updates the state of the application by loading the previous menu
+        """
         self.next_menu = self.current_menu
         self.current_menu = self.previous_menu
         self.previous_menu = self.current_menu.prev
-        self.current_menu.display()
     
-    def listen(self, message):
+    @property
+    def menus(self):
+        return self._menus
+    
+    def listen(self, message: str) -> None:
+        """
+        Takes action regarding a message from one of the menus
+
+        :param message: A string with information for the app instance to act upon
+        :type message: str
+        """
         if message == "EXIT":
+            print("Exiting...")
             self.running = False
+        elif message == "BAD_RESPONSE":
+            print("ERROR: BadResponse")
+            # quit()

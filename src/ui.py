@@ -20,8 +20,8 @@ class Prompt:
         output = self._message
         if len(self._options) > 0:
             output += "\n"
-            for _, v in self._options.items():
-                output += v+"\n"
+            for k, v in self._options.items():
+                output += f"{k}. {v}\n"
         return output
 
 # Class: BaseOutput
@@ -185,9 +185,11 @@ class TUI(UI):
         input_str = self.get_str()
         try:
             if float(input_str):
-                if int(input_str):
-                    return int(input_str)
+                if int(float(input_str)):
+                    return int(float(input_str))
                 return float(input_str)
+            elif input_str == "0":
+                return 0
             else:
                 return None
         except ValueError:
