@@ -1,4 +1,4 @@
-#!/home/jeremy/Envs/atmos/bin/python
+#!/usr/local/bin/python
 
 # atmos.py
 # Contains the entrypoint for the ATMOS software
@@ -64,7 +64,7 @@ class TestMenu(MENU_TYPE):
             pass
         elif data == 2:
             # Check connection
-            # Test.check_connections()
+            # Test.check_connection()
             pass
         elif data == 3:
             # Start test
