@@ -24,16 +24,16 @@ class Test(ABC):
     def __init__(self):
         pass
 
-    def run(self, **kwargs) -> None:
+    def _run_full(self, **kwargs) -> None:
         """
         Begins the test and iterates through all operations
         """
-        if self.check_connection():
+        if self._check_connection():
             if self.execute(**kwargs):
                 return True
         return False
 
-    def check_connection(self) -> bool:
+    def _check_connection(self) -> bool:
         """
         Confirms a good connection with the MCU
 
@@ -42,7 +42,7 @@ class Test(ABC):
         """
         return True  # placeholder until normal functionality added
 
-    def export(self, location: str) -> bool:
+    def _export(self, location: str) -> bool:
         """
         Saves the results of the test operation to a file
 
