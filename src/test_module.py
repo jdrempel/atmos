@@ -5,6 +5,16 @@ from os.path import *
 
 from connections import SerialLine
 
+"""
+TEST MODE
+---------
+
+Allows the user to transmit predefined driver signals to the MCU to be passed on to the
+unit-under-test (UUT). The test consists of a series of plain-text commands which form a
+language grammar that is then parsed into Python pseudo-instructions and transmitted to
+the MCU to be executed as signals on a serial connection.
+"""
+
 
 class Test():
     """
