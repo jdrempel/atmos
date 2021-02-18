@@ -1,4 +1,6 @@
-#!/home/jeremy/Envs/atmos/bin/python
+# connections.py
+# Contains classes and utility functions related to the operation of serial communication
+# between ATMOS and the MCU (connected via COM port)
 
 import serial as ser
 

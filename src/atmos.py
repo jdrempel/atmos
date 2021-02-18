@@ -1,8 +1,8 @@
-#!/home/jeremy/Envs/atmos/bin/python
+#!/usr/local/bin/python3.8
 
 # atmos.py
 # Contains the entrypoint for the ATMOS software
-
+from testdata import sample
 from menu import App, TerminalMenu
 from ui import Prompt, TUI
 
@@ -56,26 +56,39 @@ class TestMenu(MENU_TYPE):
             "Select an action:",
             int, test_select
         )
+        self.test = None
+        self.test_kwargs = None
 
     def perform(self, data):
+        """
+        Test menu options are Load Test, Check Connection, Start Test, Export Results, Exit, Home.
+        """
+
         if data == 1:
             # Load test
             # self.next = self.lookup_menu("TestLoaderMenu")
-            pass
+            self.test = sample.SampleTest()  # TODO ^^ implement this instead
+            self.message += f"\nLoaded: {self.test.__class__.__name__}"
+
         elif data == 2:
             # Check connection
-            # Test.check_connections()
-            pass
+            if self.test._check_connection():
+                print("Connection is good!")
+            else:
+                print("Connection not found!")
+
         elif data == 3:
             # Start test
-            # Test.run()
-            pass
+            self.test._run_full()
+
         elif data == 4:
             # Export results
             # self.next = self.lookup_menu("TestExportMenu")
-            pass
+            self.test._export(f"testdata/{self.test.__class__.__name__}_results.json")  # TODO ^^
+
         elif data == 9:
             self.app_event("EXIT")
+
         elif data == 0:
             self.next = self.lookup_menu("WelcomeScreen")
 
