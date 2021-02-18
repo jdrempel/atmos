@@ -1,45 +1,37 @@
 # test_module.py
 # Contains the main classes related to Test mode (i.e. communicating with MCU via COM port)
 
-from os.path import *
+from abc import ABC, abstractmethod
+from typing import Any
 
-from connections import SerialLine
+# from connections import SerialLine
 
 """
 TEST MODE
 ---------
 
 Allows the user to transmit predefined driver signals to the MCU to be passed on to the
-unit-under-test (UUT). The test consists of a series of plain-text commands which form a
-language grammar that is then parsed into Python pseudo-instructions and transmitted to
-the MCU to be executed as signals on a serial connection.
+unit-under-test (UUT). The test consists of a series of instructions to transmit data to the MCU
+over a serial connection.
 """
 
 
-class Test():
+class Test(ABC):
     """
-    Manages the state and properties of a test
+    Provides an interface for individual tests
     """
 
     def __init__(self):
         pass
 
-    def _import(self, location: str) -> bool:
-        """
-        Loads the contents of a file to be interpreted as a test
-
-        :param location: The path (absolute or relative) to the desired input file
-        :type location: str
-        :return: True if the file exists and the load is successful, False otherwise
-        :rtype: bool
-        """
-        pass
-
-    def run(self) -> None:
+    def run(self, **kwargs) -> None:
         """
         Begins the test and iterates through all operations
         """
-        pass
+        if self.check_connection():
+            if self.execute(**kwargs):
+                return True
+        return False
 
     def check_connection(self) -> bool:
         """
@@ -48,7 +40,7 @@ class Test():
         :return: True if a handshake signal sent to the MCU is acknowledged, False otherwise
         :rtype: bool
         """
-        pass
+        return True  # placeholder until normal functionality added
 
     def export(self, location: str) -> bool:
         """
@@ -60,3 +52,13 @@ class Test():
         :rtype: bool
         """
         pass
+
+    @abstractmethod
+    def execute(self, **kwargs) -> Any:
+        """
+        Contains the instructions to be executed as part of the test routine
+
+        :return: True if the test executes without any exceptions, False otherwise
+        :rtype: bool
+        """
+        return NotImplementedError("Test.execute() is an abstract method and must be overridden.")

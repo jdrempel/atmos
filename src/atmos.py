@@ -1,8 +1,8 @@
-#!/usr/local/bin/python
+#!/usr/local/bin/python3.8
 
 # atmos.py
 # Contains the entrypoint for the ATMOS software
-
+from testdata import sample
 from menu import App, TerminalMenu
 from ui import Prompt, TUI
 
@@ -68,6 +68,8 @@ class TestMenu(MENU_TYPE):
             pass
         elif data == 3:
             # Start test
+            test = sample.SampleTest()
+            test.run()
             # Test.run()
             pass
         elif data == 4:
