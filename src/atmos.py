@@ -16,10 +16,10 @@ from testdata import sample
 # Application Entrypoint
 if __name__ == "__main__":
 
-    tl = TestLoader()
+    loader = TestLoader()
     
     welc = welcome.WelcomeScreen()      # Main menu (mode select)
-    test = test_menu.TestMenu(tl)         # Test menu
+    test = test_menu.TestMenu(loader)         # Test menu
     sim = sim_menu.SimMenu()            # Simulation menu
     mos = mops_menu.MissionOpsMenu()    # Mission Ops menu
 
