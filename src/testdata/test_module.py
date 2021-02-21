@@ -2,7 +2,7 @@
 # Contains the main classes related to Test mode (i.e. communicating with MCU via COM port)
 
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Union
 
 # from connections import SerialLine
 
@@ -52,6 +52,39 @@ class Test(ABC):
         :rtype: bool
         """
         pass
+
+    def tx(self, message):  # TODO: Add type hints
+        """
+        Transmits a message via the serial line to the MCU
+
+        :param message: The message to be sent (TODO: What format?)
+        :type message: TODO: What type?
+        :return: TODO: What?
+        :rtype: TODO: What type is the returned value?
+        """
+        pass
+
+    def rx(self, timeout: int):  # TODO: Add type hints
+        """
+        Polls for a message from the MCU on the serial line
+
+        :param timeout: The amount of time in milliseconds to wait for the signal
+        :type timout: int
+        :return: The message that was received from the MCU
+        :rtype: TODO: What format?
+        """
+        pass
+
+    def to_bytes(self, x: Union[str, Union[int, float]]) -> bytes:
+        """
+        A wrapper for converting some data to bytes for serial transmission
+
+        :param x: The data to be converted
+        :type x: Any
+        :return: The data as a byte sequence
+        :rtype: bytes
+        """
+        return bytes(x, "utf-8")
 
     @abstractmethod
     def execute(self, **kwargs) -> Any:
