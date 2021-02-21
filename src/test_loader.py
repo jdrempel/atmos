@@ -33,8 +33,11 @@ class DynamicImporter:
             if name not in ["", "\n", "\r", "\r\n"] and f.endswith(".py"):
                 module = import_module(f"testdata.{name}")  # import the module dynamically
                 class_title = f"{name.title()}Test"
-                _class = getattr(module, class_title)  # get the class
-                self.class_list[class_title] = _class  # add the class to the class list
+                try:
+                    _class = getattr(module, class_title)  # get the class
+                    self.class_list[class_title] = _class  # add the class to the class list
+                except AttributeError:  # don't throw exceptions for files that don't have a test
+                    continue
     
     @staticmethod
     def instance():
