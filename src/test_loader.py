@@ -29,14 +29,11 @@ class DynamicImporter:
         for f in files:
             if f in ["test_module.py", "test_registry.py"]:
                 continue
-            # print(f)
             name = "".join(f.split(".")[:-1])
-            print(f"Name: {name}")
-            if name not in ["", "\n", "\r", "\r\n"]:
+            if name not in ["", "\n", "\r", "\r\n"] and f.endswith(".py"):
                 module = import_module(f"testdata.{name}")  # import the module dynamically
                 class_title = f"{name.title()}Test"
                 _class = getattr(module, class_title)  # get the class
-                print(f"Class: {_class}")
                 self.class_list[class_title] = _class  # add the class to the class list
     
     @staticmethod
