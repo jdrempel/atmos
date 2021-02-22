@@ -4,7 +4,8 @@ from os import listdir, path
 class DynamicImporter:
     """
     Allows for dynamic loading of test classes into the TestLoader at runtime
-    NOTE: This is probably not "pythonic" but it works so...
+    IMPORTANT: This is a singleton class!
+    NOTE: This is probably not "pythonic" but it works, so...
     """
 
     # TODO: Add hot-reloading so that tests written while an ATMOS instance is running can be
