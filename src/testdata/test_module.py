@@ -4,6 +4,8 @@
 from abc import ABC, abstractmethod
 from typing import Any, Union
 
+from .connections import SerialLine
+
 # from connections import SerialLine
 
 """
@@ -22,7 +24,8 @@ class Test(ABC):
     """
 
     def __init__(self):
-        pass
+        self.connection = SerialLine(f"Serial-{self.__class__.__name__}", "/dev/ttyUSB0", 9600)
+        self.connection.open()  # TODO: Lock the line for at least a second before allowing any tx
 
     def _run_full(self, **kwargs) -> None:
         """
