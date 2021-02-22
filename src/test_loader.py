@@ -4,7 +4,8 @@ from os import listdir, path
 class DynamicImporter:
     """
     Allows for dynamic loading of test classes into the TestLoader at runtime
-    NOTE: This is probably not "pythonic" but it works so...
+    IMPORTANT: This is a singleton class!
+    NOTE: This is probably not "pythonic" but it works, so...
     """
 
     # TODO: Add hot-reloading so that tests written while an ATMOS instance is running can be
@@ -33,8 +34,11 @@ class DynamicImporter:
             if name not in ["", "\n", "\r", "\r\n"] and f.endswith(".py"):
                 module = import_module(f"testdata.{name}")  # import the module dynamically
                 class_title = f"{name.title()}Test"
-                _class = getattr(module, class_title)  # get the class
-                self.class_list[class_title] = _class  # add the class to the class list
+                try:
+                    _class = getattr(module, class_title)  # get the class
+                    self.class_list[class_title] = _class  # add the class to the class list
+                except AttributeError:  # don't throw exceptions for files that don't have a test
+                    continue
     
     @staticmethod
     def instance():

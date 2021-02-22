@@ -48,7 +48,7 @@ class TestMenu(MENU_TYPE):
         :param test: The test (child of Test) to be loaded (or None if unloading)
         :type test: Test or None
         """
-        self.test = test
+        self.test = test() if test is not None else test
 
     def perform(self, data):
         """
@@ -61,7 +61,7 @@ class TestMenu(MENU_TYPE):
             # self.test = sample.SampleTest()  # TODO ^^ implement this instead
             self.loader.unload()
             self.loader.load("SampleTest")  # 0 is a placeholder for now until better loading is implemented
-            self.message += f"\nLoaded: {self.test.__name__}"  # This will keep adding
+            self.message += f"\nLoaded: {self.test.__class__.__name__}"  # This will keep adding
                                                                          # but never removing...
 
         elif data == 2:
