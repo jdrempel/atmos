@@ -128,7 +128,7 @@ class SerialLine:
         try:
             self.timeout = options['timeout']
         except KeyError:
-            self.timeout = None
+            self.timeout = 10  # TODO: Is this a sensible default value?
 
         self._line = ser.Serial(
             port=self.port,
@@ -168,6 +168,16 @@ class SerialLine:
         :rtype: int
         """
         return self._line.write(message)
+    
+    @locked
+    def receive(self):
+        """
+        Reads data from the serial line until a terminator is received
+
+        :return: The data received from the line
+        :rtype: bytes
+        """
+        return self._line.read_until()  # default terminator is linefeed (LF) char
     
     def __del__(self):
         """
