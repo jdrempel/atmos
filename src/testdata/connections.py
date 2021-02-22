@@ -93,7 +93,7 @@ def locked(func):
 
 class SerialLine:
     """
-    Wraps and restricts a Serial object for use in ATMOS Test instances
+    Provides a restricted Serial object for use in ATMOS Test instances
     """
 
     def __init__(self, name, port, baud, **options):
@@ -110,33 +110,18 @@ class SerialLine:
         self.lock = SerialLock()
         self.key  = f"{monotonic()}"
 
-        try:
-            self.byte_size = options['byte_size']
-        except KeyError:
-            self.byte_size = ser.EIGHTBITS
-        
-        try:
-            self.parity = options['parity']
-        except KeyError:
-            self.parity = ser.PARITY_NONE
-        
-        try:
-            self.stop_bits = options['stop_bits']
-        except KeyError:
-            self.stop_bits = ser.STOPBITS_ONE
-        
-        try:
-            self.timeout = options['timeout']
-        except KeyError:
-            self.timeout = 10  # TODO: Is this a sensible default value?
+        self.byte_size = options.get("byte_size", ser.EIGHTBITS)
+        self.parity    = options.get("parity", ser.PARITY_NONE)
+        self.stop_bits = options.get("stop_bits", ser.STOPBITS_ONE)
+        self.timeout   = options.get("timeout", 10)
 
         self._line = ser.Serial(
-            port=self.port,
-            baudrate=self.baud,
-            bytesize=self.byte_size,
-            parity=self.parity,
-            stopbits=self.stop_bits,
-            timeout=self.timeout
+            port       = self.port,
+            baudrate   = self.baud,
+            bytesize   = self.byte_size,
+            parity     = self.parity,
+            stopbits   = self.stop_bits,
+            timeout    = self.timeout
         )
         self._line.close()
     
