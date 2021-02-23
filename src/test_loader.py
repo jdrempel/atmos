@@ -64,7 +64,7 @@ class TestLoader:
         self.menu = menu
 
     def load(self, test_name: str):
-        self.menu.load_test(self.library[test_name])  # TODO make this actually load different tests...
+        self.menu.load_test(self.library[test_name])
     
     def unload(self):
         self.menu.load_test(None)

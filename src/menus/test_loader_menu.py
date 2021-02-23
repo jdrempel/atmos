@@ -2,17 +2,14 @@
 # Contains the TestLoaderMenu class which prompts the user to select a test to load into ATMOS
 
 from os import listdir, path
+from typing import Any
 
 from .config import MENU_TYPE, nav_select
 from .ui import Prompt
 
 ### Instance variables for TestLoaderMenu ###
 
-# Test loader menu prompt
-test_loader_select = {
-    # TODO: Create a method to populate this
-    #       Maybe make it an instance variable of TestLoaderMenu
-}
+
 
 class TestLoaderMenu(MENU_TYPE):
     """
@@ -29,21 +26,21 @@ class TestLoaderMenu(MENU_TYPE):
         super().__init__(*args, **kwargs)
         self.message = "======== LOAD ========"
         self.loader = loader
+        self.prompt_options = {}
 
         test_path = path.join(path.dirname(path.abspath(__file__)), "..", "testdata")
         files = listdir(test_path)
 
-        prompt_options = {}
 
         for f in files:
             if f in ["test_module.py", "test_registry.py", "connections.py"]:  # blacklist of py files
                 continue
             name = "".join(f.split(".")[:-1])
             if name not in ["", "\n", "\r", "\r\n"] and f.endswith(".py"):
-                prompt_options[len(prompt_options.keys())+1] = f"{name.title()}Test"
+                self.prompt_options[len(self.prompt_options.keys())+1] = f"{name.title()}Test"
         self.prompt = Prompt(
             "Select one of the following tests:",
-            str, prompt_options
+            Any, self.prompt_options
         )
         self.selection = None
 
@@ -52,8 +49,11 @@ class TestLoaderMenu(MENU_TYPE):
         Test Loader menu options are a list of strings corresponding to test names
         """
         self.loader.unload()
-        self.loader.load(str(data))
-        # TODO Remove me, I'm just here for the debugging
-        print(f"Loaded {data}!")  # TODO: ALlow users to enter a digit corresponding to the test they want
+        if isinstance(data, str):
+            self.loader.load(str(data))
+        elif isinstance(data, int):
+            self.loader.load(self.prompt_options[data])
+        else:
+            pass  # But we should probably handle this better
         
         self.next = self.lookup_menu("TestMenu")
