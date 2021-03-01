@@ -58,7 +58,6 @@ class TestMenu(MENU_TYPE):
         if data == 1:
             # Load test
             self.next = self.lookup_menu("TestLoaderMenu")
-            # self.test = sample.SampleTest()  # TODO ^^ implement this instead
             self.loader.unload()
             self.loader.load("SampleTest")  # 0 is a placeholder for now until better loading is implemented
             self.message += f"\nLoaded: {self.test.__class__.__name__}"  # This will keep adding
