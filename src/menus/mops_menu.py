@@ -4,6 +4,7 @@
 from .config import MENU_TYPE, nav_select
 from .ui import Prompt
 
+
 class MissionOpsMenu(MENU_TYPE):
     """
     The mission ops main menu
@@ -16,10 +17,7 @@ class MissionOpsMenu(MENU_TYPE):
         """
         super().__init__(*args, **kwargs)
         self.message = "======== MISSION OPS ========"
-        self.prompt = Prompt(
-            "Where to next?",
-            int, nav_select
-        )
+        self.prompt = Prompt("Where to next?", int, nav_select)
 
     def perform(self, data):
         if data == 1:

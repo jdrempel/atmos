@@ -6,15 +6,15 @@ from typing import Any, Union
 
 
 class Prompt:
-    """ 
+    """
     Represents a text prompt and its anticipated response type
-    """ 
+    """
 
     def __init__(self, message, expected_type, options={}):
         self._message = message
         self.type = expected_type
         self._options = options
-    
+
     @property
     def message(self):
         output = self._message
@@ -24,10 +24,11 @@ class Prompt:
                 output += f"{k}. {v}\n"
         return output
 
+
 # Class: BaseOutput
 # Purpose: Abstract base class for output to user
 class BaseOutput(ABC):
-    """ 
+    """
     Abstract base class for output to user.
     """
 
@@ -41,10 +42,11 @@ class BaseOutput(ABC):
         """
         pass
 
+
 # Class: TerminalOutput
 # Purpose: Allows text output to a terminal environment
 class TerminalOutput(BaseOutput):
-    """ 
+    """
     Allows text output to a terminal environment.
     """
 
@@ -57,11 +59,12 @@ class TerminalOutput(BaseOutput):
         """
         print(output)
 
+
 # Class: BaseInput
 # Purpose: Abstract base class for user input
 class BaseInput(ABC):
-    """ 
-    Abstract base class for user input. 
+    """
+    Abstract base class for user input.
     """
 
     @abstractmethod
@@ -73,6 +76,7 @@ class BaseInput(ABC):
         :rtype: str
         """
         pass
+
 
 # Class: TerminalInput
 # Purpose: Allows text input from a terminal environment
@@ -90,12 +94,13 @@ class TerminalInput(BaseInput):
         """
         return input()
 
+
 # Class: UI
 # Purpose: Abstract base class for user interface
 class UI(ABC):
-    """ 
+    """
     Abstract base class for a user interface.
-    """ 
+    """
 
     def __init__(self):
         """
@@ -141,7 +146,7 @@ class UI(ABC):
         pass
 
     @abstractmethod
-    def prompt(self, prompt: str, type_: Any=str) -> Union[Union[int, float], str]:
+    def prompt(self, prompt: str, type_: Any = str) -> Union[Union[int, float], str]:
         """
         Displays a prompt and waits for user input based on the prompt
 
@@ -154,10 +159,11 @@ class UI(ABC):
         """
         pass
 
+
 # Class: TUI
 # Purpose: User interface in a terminal setting
 class TUI(UI):
-    """ 
+    """
     Implements a user interface (UI) in a terminal setting.
     """
 
@@ -174,7 +180,7 @@ class TUI(UI):
         :rtype: str
         """
         return self.inputSrc.get()
-    
+
     def get_num(self, any=False) -> Union[int, float]:
         """
         Gets a user-entered number from the terminal
@@ -198,7 +204,7 @@ class TUI(UI):
             if any == True:
                 return input_str
             return None
-    
+
     def output(self, string: str) -> None:
         """
         Outputs a string to the terminal
@@ -230,4 +236,3 @@ class TUI(UI):
         elif prompt.type in [int, float]:
             response = self.get_num()
         return response
-

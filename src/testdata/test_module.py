@@ -98,4 +98,6 @@ class Test(ABC):
         :return: True if the test executes without any exceptions, False otherwise
         :rtype: bool
         """
-        return NotImplementedError("Test.execute() is an abstract method and must be overridden.")
+        return NotImplementedError(
+            "Test.execute() is an abstract method and must be overridden."
+        )

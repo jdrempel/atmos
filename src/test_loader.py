@@ -1,6 +1,7 @@
 from importlib import import_module
 from os import listdir, path
 
+
 class DynamicImporter:
     """
     Allows for dynamic loading of test classes into the TestLoader at runtime
@@ -32,14 +33,18 @@ class DynamicImporter:
                 continue
             name = "".join(f.split(".")[:-1])
             if name not in ["", "\n", "\r", "\r\n"] and f.endswith(".py"):
-                module = import_module(f"testdata.{name}")  # import the module dynamically
+                module = import_module(
+                    f"testdata.{name}"
+                )  # import the module dynamically
                 class_title = f"{name.title()}Test"
                 try:
                     _class = getattr(module, class_title)  # get the class
-                    self.class_list[class_title] = _class  # add the class to the class list
+                    self.class_list[
+                        class_title
+                    ] = _class  # add the class to the class list
                 except AttributeError:  # don't throw exceptions for files that don't have a test
                     continue
-    
+
     @staticmethod
     def instance():
         """
@@ -59,12 +64,12 @@ class TestLoader:
         self.menu = None
         self.importer = DynamicImporter.instance()
         self.library = self.importer.class_list
-    
+
     def set_menu(self, menu):
         self.menu = menu
 
     def load(self, test_name: str):
         self.menu.load_test(self.library[test_name])
-    
+
     def unload(self):
         self.menu.load_test(None)

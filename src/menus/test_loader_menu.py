@@ -10,7 +10,6 @@ from .ui import Prompt
 ### Instance variables for TestLoaderMenu ###
 
 
-
 class TestLoaderMenu(MENU_TYPE):
     """
     The test loader menu (prompts user to select a test)
@@ -31,16 +30,20 @@ class TestLoaderMenu(MENU_TYPE):
         test_path = path.join(path.dirname(path.abspath(__file__)), "..", "testdata")
         files = listdir(test_path)
 
-
         for f in files:
-            if f in ["test_module.py", "test_registry.py", "connections.py"]:  # blacklist of py files
+            if f in [
+                "test_module.py",
+                "test_registry.py",
+                "connections.py",
+            ]:  # blacklist of py files
                 continue
             name = "".join(f.split(".")[:-1])
             if name not in ["", "\n", "\r", "\r\n"] and f.endswith(".py"):
-                self.prompt_options[len(self.prompt_options.keys())+1] = f"{name.title()}Test"
+                self.prompt_options[
+                    len(self.prompt_options.keys()) + 1
+                ] = f"{name.title()}Test"
         self.prompt = Prompt(
-            "Select one of the following tests:",
-            Any, self.prompt_options
+            "Select one of the following tests:", Any, self.prompt_options
         )
         self.selection = None
 
@@ -55,5 +58,5 @@ class TestLoaderMenu(MENU_TYPE):
             self.loader.load(self.prompt_options[data])
         else:
             pass  # But we should probably handle this better
-        
+
         self.next = self.lookup_menu("TestMenu")

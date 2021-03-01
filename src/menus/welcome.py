@@ -21,8 +21,9 @@ mode_select = {
 
 #####################################################
 
+
 class WelcomeScreen(MENU_TYPE):
-    """ 
+    """
     The first menu (select mode)
     """
 
@@ -35,11 +36,8 @@ class WelcomeScreen(MENU_TYPE):
         """
         super().__init__(*args, **kwargs)
         self.message = welcome_msg
-        self.prompt = Prompt(
-            "Select one of the following options:",
-            int, mode_select
-        )
-    
+        self.prompt = Prompt("Select one of the following options:", int, mode_select)
+
     def perform(self, data):
         if data == 1:
             self.next = self.lookup_menu("TestMenu")
