@@ -4,7 +4,7 @@
 from .config import MENU_TYPE
 from .ui import Prompt
 
-### Instance variables for the WelcomeScreen menu ###
+# ## Instance variables for the WelcomeScreen menu ## #
 
 welcome_msg = """
 ======== Welcome to A.T.M.O.S.! ========

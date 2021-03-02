@@ -4,10 +4,10 @@
 from os import listdir, path
 from typing import Any
 
-from .config import MENU_TYPE, nav_select
+from .config import MENU_TYPE
 from .ui import Prompt
 
-### Instance variables for TestLoaderMenu ###
+# ## Instance variables for TestLoaderMenu ## #
 
 
 class TestLoaderMenu(MENU_TYPE):

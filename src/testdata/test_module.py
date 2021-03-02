@@ -4,7 +4,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Union
 
-from .connections import SerialLine
+# from .connections import SerialLine
 
 # from connections import SerialLine
 

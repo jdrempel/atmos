@@ -4,7 +4,7 @@
 from .config import MENU_TYPE
 from .ui import Prompt
 
-### Instance variables for TestMenu ###
+# ## Instance variables for TestMenu ## #
 
 # Test menu prompt
 test_select = {

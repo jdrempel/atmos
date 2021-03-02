@@ -201,7 +201,7 @@ class TUI(UI):
             else:
                 return None
         except ValueError:
-            if any == True:
+            if any is True:
                 return input_str
             return None
 

@@ -2,8 +2,7 @@
 
 # atmos.py
 # Contains the entrypoint for the ATMOS software
-from menus.menu import App, TerminalMenu
-from menus.ui import Prompt, TUI
+from menus.menu import App
 from menus import (
     mops_menu,
     sim_menu,
@@ -12,7 +11,6 @@ from menus import (
     welcome,
 )
 from test_loader import TestLoader
-from testdata import sample
 
 # Application Entrypoint
 if __name__ == "__main__":
