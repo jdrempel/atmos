@@ -136,6 +136,12 @@ class SerialLine:
         self._line.open()
         self.lock.lock(2, self.key)
 
+    def close(self):
+        """
+        Closes the serial line immediately
+        """
+        self._line.close()
+
     @property
     def is_open(self):
         """
