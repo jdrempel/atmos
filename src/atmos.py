@@ -16,7 +16,7 @@ from test_loader import TestLoader
 if __name__ == "__main__":
 
     loader = TestLoader()
-
+    
     welc = welcome.WelcomeScreen()  # Main menu (mode select)
 
     test = test_menu.TestMenu(loader)  # Test menu

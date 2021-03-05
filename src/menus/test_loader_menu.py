@@ -9,7 +9,6 @@ from .ui import Prompt
 
 # ## Instance variables for TestLoaderMenu ## #
 
-
 class TestLoaderMenu(MENU_TYPE):
     """
     The test loader menu (prompts user to select a test)
@@ -39,9 +38,9 @@ class TestLoaderMenu(MENU_TYPE):
                 continue
             name = "".join(f.split(".")[:-1])
             if name not in ["", "\n", "\r", "\r\n"] and f.endswith(".py"):
-                self.prompt_options[
-                    len(self.prompt_options.keys()) + 1
-                ] = f"{name.title()}Test"
+                self.prompt_options.update(
+                    {len(self.prompt_options.keys())+1: f"{name.title()}Test"}
+                )
         self.prompt = Prompt(
             "Select one of the following tests:", Any, self.prompt_options
         )
