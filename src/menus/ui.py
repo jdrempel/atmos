@@ -175,10 +175,12 @@ class TUI(UI):
         """
         return self.inputSrc.get()
     
-    def get_num(self) -> Union[int, float]:
+    def get_num(self, any=False) -> Union[int, float]:
         """
         Gets a user-entered number from the terminal
 
+        :param any: (optional) If True, allow this method to return a valid str if the input cannot be converted
+        :type any: bool
         :return: The number (int or float) that the user entered
         :rtype: Union[int, float]
         """
@@ -193,6 +195,8 @@ class TUI(UI):
             else:
                 return None
         except ValueError:
+            if any == True:
+                return input_str
             return None
     
     def output(self, string: str) -> None:
@@ -215,7 +219,13 @@ class TUI(UI):
         """
         self.output(prompt.message)
         response = None
-        if prompt.type == str:
+        if prompt.type == Any:
+            response = self.get_num(any=True)  # This could be better-implemented
+            try:
+                response = int(response)
+            except ValueError:
+                pass
+        elif prompt.type == str:
             response = self.get_str()
         elif prompt.type in [int, float]:
             response = self.get_num()
