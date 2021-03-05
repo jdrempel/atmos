@@ -6,12 +6,13 @@ from typing import Any
 
 from .ui import Prompt, TUI
 
+
 class BaseMenu(ABC):
     """
     Provides an interface for various kinds of menus
     """
 
-    def __init__(self, message:str=None, prompt:Prompt=None, callback=None):
+    def __init__(self, message: str = None, prompt: Prompt = None, callback=None):
         self.interface = None
         self.message = message
         self._prompt = prompt
@@ -36,7 +37,7 @@ class BaseMenu(ABC):
         except TypeError:
             pass
         self.perform(response)
-    
+
     @property
     def prompt(self) -> Prompt:
         """
@@ -46,7 +47,7 @@ class BaseMenu(ABC):
         :rtype: Prompt
         """
         return self._prompt
-    
+
     @prompt.setter
     def prompt(self, prompt: Prompt) -> None:
         """
@@ -97,23 +98,23 @@ class BaseMenu(ABC):
         """
         self._next = next
         self._app.load_next(self._next)
-    
+
     def app_event(self, message: Any) -> None:
-        """ 
+        """
         Sends a message to the menu's app
 
         :param message: The payload to be delivered to the app
         :type message: Any
-        """ 
+        """
         self._app.listen(message)
-    
+
     @abstractmethod
     def perform(self, data: Any) -> None:
         """
         Performs the "business logic" for this menu
         """
         pass
-    
+
     def lookup_menu(self, name: str):
         """
         Returns a menu from the current menu's app instance by name
@@ -122,22 +123,24 @@ class BaseMenu(ABC):
         :type name: str
         """
         return self._app.menus[name]
-    
-class TerminalMenu(BaseMenu):
-    """ 
-    Implements a terminal UI menu (text-based)
-    """ 
 
-    def __init__(self, message: str=None, prompt: Prompt=None, callback=None):
+
+class TerminalMenu(BaseMenu):
+    """
+    Implements a terminal UI menu (text-based)
+    """
+
+    def __init__(self, message: str = None, prompt: Prompt = None, callback=None):
         super().__init__(message, prompt, callback)
         self.interface = TUI()
-    
+
     @abstractmethod
     def perform(self) -> None:
         pass
 
+
 class App:
-    """ 
+    """
     Manages the state of the application and transitions between menus
     """
 
@@ -161,7 +164,7 @@ class App:
         self.previous_menu = None
         self.next_menu = None
         self.running = False
-    
+
     @staticmethod
     def instance():
         """
@@ -170,7 +173,7 @@ class App:
         if App._instance is None:
             App()
         return App._instance
-    
+
     @staticmethod
     def get_menu_name(menu: BaseMenu) -> str:
         """
@@ -182,7 +185,7 @@ class App:
         :rtype: str
         """
         return menu.__class__.__name__
-    
+
     @staticmethod
     def register_menu(menu: BaseMenu) -> None:
         """
@@ -192,7 +195,7 @@ class App:
         :type menu: BaseMenu
         """
         App._menus[App.get_menu_name(menu)] = menu
-    
+
     def run(self, start: BaseMenu) -> None:
         """
         The main loop for the application
@@ -204,7 +207,7 @@ class App:
         self.running = True
         while self.running:
             self.current_menu.display()
-    
+
     def load_next(self, next: BaseMenu) -> None:
         """
         Updates the state of the application by loading the next menu
@@ -215,7 +218,7 @@ class App:
         self.previous_menu = self.current_menu
         self.current_menu = next
         self.current_menu.prev = self.previous_menu
-    
+
     def load_prev(self):
         """
         Updates the state of the application by loading the previous menu
@@ -223,11 +226,11 @@ class App:
         self.next_menu = self.current_menu
         self.current_menu = self.previous_menu
         self.previous_menu = self.current_menu.prev
-    
+
     @property
     def menus(self):
         return self._menus
-    
+
     def listen(self, message: str) -> None:
         """
         Takes action regarding a message from one of the menus

@@ -22,8 +22,10 @@ class SerialLock:
         self.duration = 0  # how long before the lock can be attempted
         self.active = False  # whether the lock is currently locked
         self.time = 0  # the time at which the lock was locked
-        self.key = None  # a base64 byte sequence that must be provided to unlock this lock
-    
+        self.key = (
+            None  # a base64 byte sequence that must be provided to unlock this lock
+        )
+
     def attempt_unlock(self, key: Union[int, float, str, bytes] = None) -> bool:
         """
         Attempts to unlock this SerialLock instance
@@ -42,8 +44,8 @@ class SerialLock:
             decoded_key = b64decode(self.key)
             if decoded_key == bytes(str(key), "utf-8"):
                 self.active = False
-        return (not self.active)
-    
+        return not self.active
+
     def lock(self, duration: int, key: Union[int, float, str, bytes] = None) -> None:
         """
         Locks this SerialLock instance
@@ -54,7 +56,9 @@ class SerialLock:
         :type key: Union[int, float, str, bytes]
         """
         self.duration = duration
-        self.key = b64encode(bytes(str(key), "utf-8")) if key is not None else key  # I hate Python ternary
+        self.key = (
+            b64encode(bytes(str(key), "utf-8")) if key is not None else key
+        )  # I hate Python ternary
         self.time = monotonic()
         self.active = True
 
@@ -108,30 +112,36 @@ class SerialLine:
         self.port = port
         self.baud = baud
         self.lock = SerialLock()
-        self.key  = f"{monotonic()}"
+        self.key = f"{monotonic()}"
 
         self.byte_size = options.get("byte_size", ser.EIGHTBITS)
-        self.parity    = options.get("parity", ser.PARITY_NONE)
+        self.parity = options.get("parity", ser.PARITY_NONE)
         self.stop_bits = options.get("stop_bits", ser.STOPBITS_ONE)
-        self.timeout   = options.get("timeout", 10)
+        self.timeout = options.get("timeout", 10)
 
         self._line = ser.Serial(
-            port       = self.port,
-            baudrate   = self.baud,
-            bytesize   = self.byte_size,
-            parity     = self.parity,
-            stopbits   = self.stop_bits,
-            timeout    = self.timeout
+            port=self.port,
+            baudrate=self.baud,
+            bytesize=self.byte_size,
+            parity=self.parity,
+            stopbits=self.stop_bits,
+            timeout=self.timeout,
         )
         self._line.close()
-    
+
     def open(self):
         """
         Opens and subsequently locks the serial line for 2 seconds (to give it time to open)
         """
         self._line.open()
         self.lock.lock(2, self.key)
-    
+
+    def close(self):
+        """
+        Closes the serial line immediately
+        """
+        self._line.close()
+
     @property
     def is_open(self):
         """
@@ -141,7 +151,7 @@ class SerialLine:
         :rtype: bool
         """
         return self._line.is_open
-    
+
     @locked
     def transmit(self, message: bytes):
         """
@@ -153,7 +163,7 @@ class SerialLine:
         :rtype: int
         """
         return self._line.write(message)
-    
+
     @locked
     def receive(self):
         """
@@ -163,7 +173,7 @@ class SerialLine:
         :rtype: bytes
         """
         return self._line.read_until()  # default terminator is linefeed (LF) char
-    
+
     def __del__(self):
         """
         Cleans up the Serial instance before finalizing the deletion of this SerialLine instance
@@ -172,7 +182,7 @@ class SerialLine:
             self._line.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     """
     Simple regression test
     """
@@ -185,7 +195,7 @@ if __name__ == '__main__':
             self.lock = SerialLock()
             self.lock.lock(1.5, self.key)
             print(self.key)
-        
+
         @locked
         def foo(self, other, world):
             print(f"Hello, {world}! ({other})")
@@ -199,7 +209,7 @@ if __name__ == '__main__':
     for _ in range(10):
         t.foo("Nice", "mundo")
         sleep(0.2)
-    
+
     t.foo("Hey!", "monday")
 
     # key = f"{monotonic()}"

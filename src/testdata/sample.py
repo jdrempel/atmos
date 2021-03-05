@@ -1,5 +1,6 @@
 from .test_module import Test
 
+
 class SampleTest(Test):
     """
     This is a sample test that is used for general debugging of ATMOS

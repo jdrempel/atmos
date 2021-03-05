@@ -2,8 +2,7 @@
 
 # atmos.py
 # Contains the entrypoint for the ATMOS software
-from menus.menu import App, TerminalMenu
-from menus.ui import Prompt, TUI
+from menus.menu import App
 from menus import (
     mops_menu,
     sim_menu,
@@ -12,20 +11,19 @@ from menus import (
     welcome,
 )
 from test_loader import TestLoader
-from testdata import sample
 
 # Application Entrypoint
 if __name__ == "__main__":
 
     loader = TestLoader()
     
-    welc = welcome.WelcomeScreen()      # Main menu (mode select)
+    welc = welcome.WelcomeScreen()  # Main menu (mode select)
 
-    test = test_menu.TestMenu(loader)         # Test menu
+    test = test_menu.TestMenu(loader)  # Test menu
     load = test_loader_menu.TestLoaderMenu(loader)
 
-    sim = sim_menu.SimMenu()            # Simulation menu
-    mos = mops_menu.MissionOpsMenu()    # Mission Ops menu
+    sim = sim_menu.SimMenu()  # Simulation menu
+    mos = mops_menu.MissionOpsMenu()  # Mission Ops menu
 
     app = App.instance()
     app.run(welc)

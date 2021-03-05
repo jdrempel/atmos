@@ -4,7 +4,7 @@
 from .config import MENU_TYPE
 from .ui import Prompt
 
-### Instance variables for TestMenu ###
+# ## Instance variables for TestMenu ## #
 
 # Test menu prompt
 test_select = {
@@ -17,6 +17,7 @@ test_select = {
 }
 
 #######################################
+
 
 class TestMenu(MENU_TYPE):
     """
@@ -32,15 +33,12 @@ class TestMenu(MENU_TYPE):
         """
         super().__init__(*args, **kwargs)
         self.message = "======== TEST ========"
-        self.prompt = Prompt(
-            "Select an action:",
-            int, test_select
-        )
+        self.prompt = Prompt("Select an action:", int, test_select)
         self.loader = loader
         self.loader.set_menu(self)
         self.test = None
         self.test_kwargs = None
-    
+
     def load_test(self, test):
         """
         Loads a given test instance
@@ -73,7 +71,9 @@ class TestMenu(MENU_TYPE):
         elif data == 4:
             # Export results
             # self.next = self.lookup_menu("TestExportMenu")
-            self.test._export(f"testdata/{self.test.__class__.__name__}_results.json")  # TODO ^^
+            self.test._export(
+                f"testdata/{self.test.__class__.__name__}_results.json"
+            )  # TODO ^^
 
         elif data == 9:
             self.app_event("EXIT")

@@ -4,6 +4,7 @@
 from .config import MENU_TYPE, nav_select
 from .ui import Prompt
 
+
 class SimMenu(MENU_TYPE):
     """
     The simulation main menu
@@ -16,10 +17,7 @@ class SimMenu(MENU_TYPE):
         """
         super().__init__(*args, **kwargs)
         self.message = "======== SIM ========"
-        self.prompt = Prompt(
-            "Where to next?",
-            int, nav_select
-        )
+        self.prompt = Prompt("Where to next?", int, nav_select)
 
     def perform(self, data):
         if data == 1:

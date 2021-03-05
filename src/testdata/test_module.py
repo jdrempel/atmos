@@ -4,7 +4,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Union
 
-from .connections import SerialLine
+# from .connections import SerialLine
 
 # from connections import SerialLine
 
@@ -24,17 +24,25 @@ class Test(ABC):
     """
 
     def __init__(self):
-        pass
         # self.connection = SerialLine(f"Serial-{self.__class__.__name__}", "/dev/ttyUSB0", 9600)
         # self.connection.open()  # TODO: Lock the line for at least a second before allowing any tx
+        pass
 
     def _run_full(self, **kwargs) -> None:
         """
         Begins the test and iterates through all operations
         """
         if self._check_connection():
-            if self.execute(**kwargs):
-                return True
+            try:
+                if self.execute(**kwargs):
+                    return True
+            except Exception:
+                # some exception handling stuff (?)
+                pass
+            finally:
+                # close the serial line
+                self.connection.close()
+
         return False
 
     def _check_connection(self) -> bool:
@@ -98,4 +106,6 @@ class Test(ABC):
         :return: True if the test executes without any exceptions, False otherwise
         :rtype: bool
         """
-        return NotImplementedError("Test.execute() is an abstract method and must be overridden.")
+        return NotImplementedError(
+            "Test.execute() is an abstract method and must be overridden."
+        )
