@@ -46,7 +46,7 @@ class SerialLock:
                 self.active = False
         return not self.active
 
-    def lock(self, duration: int, key: Union[int, float, str, bytes] = None) -> None:
+    def lock(self, duration: Union[int, float], key: Union[int, float, str, bytes] = None) -> None:
         """
         Locks this SerialLock instance
 

@@ -1,6 +1,8 @@
 from importlib import import_module
 from os import listdir, path
 
+from pathlib import Path
+
 
 class DynamicImporter:
     """
@@ -25,25 +27,24 @@ class DynamicImporter:
             raise Exception("DynamicImporter instance already exists!")
         DynamicImporter._instance = self
 
-        test_path = path.join(path.dirname(path.abspath(__file__)), "testdata")
-        files = listdir(test_path)
+        current_path = Path(__file__).parent
+        test_path = current_path / "testdata"
+        files = test_path.rglob("*.py")
 
-        for f in files:
-            if f in ["test_module.py", "test_registry.py"]:
+        for file in files:
+
+            if file.name in ["test_module.py", "test_registry.py", "connections.py"]:
                 continue
-            name = "".join(f.split(".")[:-1])
-            if name not in ["", "\n", "\r", "\r\n"] and f.endswith(".py"):
-                module = import_module(
-                    f"testdata.{name}"
-                )  # import the module dynamically
-                class_title = f"{name.title()}Test"
-                try:
-                    _class = getattr(module, class_title)  # get the class
-                    self.class_list[
-                        class_title
-                    ] = _class  # add the class to the class list
-                except AttributeError:  # don't throw exceptions for files that don't have a test
-                    continue
+
+            name = file.stem
+            module = import_module(f"testdata.{name}")
+            class_title = f"{name.title()}Test"
+
+            try:
+                _class = getattr(module, class_title)  # get the class
+                self.class_list[class_title] = _class  # add the class to the class list
+            except AttributeError:  # don't throw exceptions for files that don't have a test
+                continue
 
     @staticmethod
     def instance():
