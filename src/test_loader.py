@@ -1,6 +1,4 @@
 from importlib import import_module
-from os import listdir, path
-
 from pathlib import Path
 
 
@@ -33,7 +31,7 @@ class DynamicImporter:
 
         for file in files:
 
-            if file.name in ["test_module.py", "test_registry.py", "connections.py"]:
+            if file.name in ["__init__.py", "test_module.py", "test_registry.py", "connections.py"]:
                 continue
 
             name = file.stem
